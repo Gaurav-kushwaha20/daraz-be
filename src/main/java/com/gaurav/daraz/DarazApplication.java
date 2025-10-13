@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DarazApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DarazApplication.class, args);
+        SpringApplication.run(DarazApplication.class, args);
 	}
 
 }
