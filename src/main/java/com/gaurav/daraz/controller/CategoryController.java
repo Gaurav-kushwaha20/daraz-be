@@ -2,15 +2,15 @@ package com.gaurav.daraz.controller;
 
 import com.gaurav.daraz.dto.ApiResponse;
 import com.gaurav.daraz.dto.CategoryResponse;
+import com.gaurav.daraz.dto.PaginationResponse;
 import com.gaurav.daraz.entity.Category;
 import com.gaurav.daraz.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -26,14 +26,11 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllCategory(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int pageSize
-    ) {
+    public ResponseEntity<?> getAllCategory(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-
-        List<CategoryResponse> categoriesList = categoryService.getAllCategories();
-        return ResponseEntity.ok().body(new ApiResponse<List<CategoryResponse>>("Category  retrieved successfully", 200, true, categoriesList, null));
+        Page<CategoryResponse> categoriesList = categoryService.getAllCategories(pageable);
+        PaginationResponse<CategoryResponse> paginationResponse = PaginationResponse.<CategoryResponse>builder().data(categoriesList.getContent()).totalItems(categoriesList.getTotalElements()).totalPages(categoriesList.getTotalPages()).pageSize(categoriesList.getSize()).page(categoriesList.getNumber()).counter(categoriesList.getNumberOfElements()).build();
+        return ResponseEntity.ok().body(new ApiResponse<PaginationResponse<CategoryResponse>>("Category  retrieved successfully", 200, true, paginationResponse, null));
     }
 
     @GetMapping(value = "/{id}")
