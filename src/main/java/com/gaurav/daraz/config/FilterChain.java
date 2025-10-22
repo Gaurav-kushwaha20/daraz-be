@@ -21,7 +21,7 @@ public class FilterChain {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/**",
+                                "/api/v1/**",
                                 "/upload/**")
                         .permitAll()
                         .anyRequest().authenticated());
@@ -33,8 +33,7 @@ public class FilterChain {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(
-                List.of("*"));
-        // config.setAllowedOrigins(List.of("*"));
+                List.of("http://localhost:3000", "http://192.168.1.78:3000"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
